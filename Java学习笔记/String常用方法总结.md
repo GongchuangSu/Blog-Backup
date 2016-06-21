@@ -94,3 +94,68 @@ public static String valueOf(char data[], int offset, int count) {
 }
 ```
 
+# intern
+**源码：**
+```java
+/*
+Returns a canonical representation for the string object. 
+
+A pool of strings, initially empty, is maintained privately by the class String. 
+
+When the intern method is invoked, if the pool already contains a string equal to
+this String object as determined by the equals(Object) method, then the string 
+from the pool is returned. Otherwise, this String object is added to the pool 
+and a reference to this String object is returned. 
+
+It follows that for any two strings s and t, s.intern() == t.intern() is true 
+if and only if s.equals(t) is true. 
+
+All literal strings and string-valued constant expressions are interned. 
+String literals are defined in section 3.10.5 of the The Java™ Language Specification.
+
+Returns:
+a string that has the same contents as this string, 
+but is guaranteed to be from a pool of unique strings.
+*/
+public native String intern();
+```
+由源码可知，当调用`intern`方法时，如果字符串资源池中已经包含一个等于该String对象的字符串(通过equals(object)方法确定)，则返回资源池中相等字符串的引用；否则，将该String对象添加到资源池中，并返回该String对象的引用。
+例1：
+```java
+public class StringDemo {
+    public static void main(String[] args) {
+        String s1 = new String("1");
+        s1.intern();
+        String s2 = "1";
+        System.out.println(s1 == s2);
+
+        String s3 = new StringBuilder("1").append("1").toString();
+        s3.intern();
+        String s4 = "11";       
+        System.out.println(s3 == s4);    	
+    }
+}
+/* output
+false
+true
+*/
+```
+例2：
+```java
+public class StringDemo {
+    public static void main(String[] args) {
+      String str1 = new StringBuilder("hello").append("string").toString();
+      System.out.println(str1.intern() == str1);
+      String str2 = new StringBuilder("ja").append("va").toString();
+      System.out.println(str2.intern() == str2);   	
+    }
+}
+/* output
+true
+false
+*/
+```
+问题待解决。。。
+
+# 参考资料
+1. [深入解析String#intern](http://tech.meituan.com/in_depth_understanding_string_intern.html)
